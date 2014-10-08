@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LinqToExcel;
+using MOISupport.Properties;
 using NLog;
 using Remotion.Mixins.Definitions;
+using ServiceStack;
 using ServiceStack.Text;
 
 namespace MOISupport.AddressFixer
@@ -14,6 +17,7 @@ namespace MOISupport.AddressFixer
     class Loader
     {
         private string filePath;
+        public AddressFixerForm HandledForm { get; set; }
 
         private List<AddressInformation> GetValue(string filePath)
         {
@@ -25,45 +29,77 @@ namespace MOISupport.AddressFixer
             excelQueryFactory.AddMapping<AddressInformation>(x => x.PostalCode, "PostalCode");
             excelQueryFactory.AddMapping<AddressInformation>(x => x.Lat, "Lattitude");
             excelQueryFactory.AddMapping<AddressInformation>(x => x.Lng, "longitude");
-
             var usersToImport = excelQueryFactory.Worksheet<AddressInformation>(0).ToList();
 
             return usersToImport;
         }
 
-        public void Load(AddressFixerForm form)
+        public void Load()
         {
-            var openFileDialog = new OpenFileDialog();
+            
 
-            openFileDialog.Filter = @"Excel Files (*.xls, *xlsx)|*.xls;*.xlsx;*.xlsm";
-            openFileDialog.FilterIndex = 1;
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            //if (ShowDialog(OpenFileDialog) != DialogResult.OK) return;
+
+            try
             {
-                try
-                {
-                    var loadedRecords = GetValue(openFileDialog.FileName);
+                var loadedRecords = GetValue(OpenFileDialog.FileName);
 
-                    filePath = openFileDialog.SafeFileName;
+                filePath = OpenFileDialog.SafeFileName;
 
-                    form.fileInfoTextBox.Text = BuildInfo(loadedRecords);
-                }
-                catch (Exception)
+                Action actionTextBox = () =>
                 {
-                    throw;
+                    HandledForm.fileInfoTextBox.Text = BuildInfo(loadedRecords);
+                };
+
+                Action actionFileButton = () =>
+                {
+                    HandledForm.loadFileButton.Text = Resources.loadFileButton_Loading;
+                };
+
+                if (HandledForm.fileInfoTextBox.InvokeRequired)
+                {
+                    HandledForm.fileInfoTextBox.Invoke(actionTextBox);
                 }
-            }  
+                else
+                {
+                    actionTextBox();
+                }
+
+                if (HandledForm.loadFileButton.InvokeRequired)
+                {
+                    HandledForm.loadFileButton.Invoke(actionFileButton);
+                }
+                else
+                {
+                    actionFileButton();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        public OpenFileDialog OpenFileDialog { get; set; }
+
+        public DialogResult ShowDialog(OpenFileDialog openFileDialog)
+        {
+            return openFileDialog.ShowDialog();
         }
 
         public string BuildInfo(List<AddressInformation> loadedRecords)
         {
             string info = string.Format
                 (
+//----------------file info-------------------
 @"File Name: {0}
-Records Count: {1}",
-                    filePath, loadedRecords.Count
-                ).Trim('\t');
+Records Count: {1}
+Example_Row: {2}",
+//--------------------------------------------
+                    filePath, loadedRecords.Count, loadedRecords[0].Dump()
+                );
             
-
             return info;
         }
     }
@@ -78,14 +114,14 @@ Records Count: {1}",
         public string Lat { get; set; }
         public string Lng { get; set; }
 
-        public string CityAndState
+        public string GetCityAndState()
         {
-            get { return string.Join(",", City, State); }
+            return string.Join(",", City, State);
         }
 
-        public string LatAndLng
+        public string GetLatAndLng()
         {
-            get { return string.Join(",", Lat, Lng); }
+            return string.Join(",", Lat, Lng); 
         }
     }
 }

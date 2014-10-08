@@ -41,9 +41,11 @@
             this.loadFileButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.fileInfoTextBox = new System.Windows.Forms.RichTextBox();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.progressAnimatonBox = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.menuStrip3.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.progressAnimatonBox)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip3
@@ -123,7 +125,7 @@
             // 
             this.loadFileButton.Location = new System.Drawing.Point(13, 38);
             this.loadFileButton.Name = "loadFileButton";
-            this.loadFileButton.Size = new System.Drawing.Size(259, 23);
+            this.loadFileButton.Size = new System.Drawing.Size(371, 31);
             this.loadFileButton.TabIndex = 4;
             this.loadFileButton.Text = "Load File";
             this.loadFileButton.UseVisualStyleBackColor = true;
@@ -134,7 +136,7 @@
             this.groupBox1.Controls.Add(this.fileInfoTextBox);
             this.groupBox1.Location = new System.Drawing.Point(13, 68);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(259, 292);
+            this.groupBox1.Size = new System.Drawing.Size(408, 292);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "File Info";
@@ -146,25 +148,36 @@
             this.fileInfoTextBox.Location = new System.Drawing.Point(7, 20);
             this.fileInfoTextBox.Name = "fileInfoTextBox";
             this.fileInfoTextBox.ReadOnly = true;
-            this.fileInfoTextBox.Size = new System.Drawing.Size(246, 266);
+            this.fileInfoTextBox.Size = new System.Drawing.Size(395, 266);
             this.fileInfoTextBox.TabIndex = 0;
             this.fileInfoTextBox.Text = "No Files Loaded.";
+            this.fileInfoTextBox.TextChanged += new System.EventHandler(this.fileInfoTextBox_TextChanged);
             // 
-            // progressBar1
+            // progressAnimatonBox
             // 
-            this.progressBar1.Location = new System.Drawing.Point(364, 52);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(259, 23);
-            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBar1.TabIndex = 6;
-            this.progressBar1.Visible = false;
+            this.progressAnimatonBox.Image = global::MOISupport.Properties.Resources.Progress;
+            this.progressAnimatonBox.InitialImage = null;
+            this.progressAnimatonBox.Location = new System.Drawing.Point(390, 38);
+            this.progressAnimatonBox.Name = "progressAnimatonBox";
+            this.progressAnimatonBox.Size = new System.Drawing.Size(31, 31);
+            this.progressAnimatonBox.TabIndex = 1;
+            this.progressAnimatonBox.TabStop = false;
+            this.progressAnimatonBox.Visible = false;
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(428, 38);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(623, 322);
+            this.panel1.TabIndex = 6;
             // 
             // AddressFixerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1063, 602);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.progressAnimatonBox);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.loadFileButton);
             this.Controls.Add(this.textBox1);
@@ -174,6 +187,7 @@
             this.menuStrip3.ResumeLayout(false);
             this.menuStrip3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.progressAnimatonBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -191,10 +205,11 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button loadFileButton;
+        public System.Windows.Forms.Button loadFileButton;
         private System.Windows.Forms.GroupBox groupBox1;
         public System.Windows.Forms.RichTextBox fileInfoTextBox;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.PictureBox progressAnimatonBox;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
