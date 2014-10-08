@@ -29,9 +29,9 @@ namespace MOISupport.AddressFixer
             excelQueryFactory.AddMapping<AddressInformation>(x => x.PostalCode, "PostalCode");
             excelQueryFactory.AddMapping<AddressInformation>(x => x.Lat, "Lattitude");
             excelQueryFactory.AddMapping<AddressInformation>(x => x.Lng, "longitude");
-            var usersToImport = excelQueryFactory.Worksheet<AddressInformation>(0).ToList();
+            var usersToImport = excelQueryFactory.Worksheet<AddressInformation>(0);
 
-            return usersToImport;
+            return usersToImport.ToList();
         }
 
         public void Load()
@@ -48,7 +48,8 @@ namespace MOISupport.AddressFixer
 
                 Action actionTextBox = () =>
                 {
-                    HandledForm.fileInfoTextBox.Text = BuildInfo(loadedRecords);
+                    var infoList = BuildInfo(loadedRecords);
+                    HandledForm.fileInfoTextBox.Text = infoList;
                 };
 
                 Action actionFileButton = () =>
@@ -94,7 +95,9 @@ namespace MOISupport.AddressFixer
                 (
 //----------------file info-------------------
 @"File Name: {0}
+
 Records Count: {1}
+
 Example_Row: {2}",
 //--------------------------------------------
                     filePath, loadedRecords.Count, loadedRecords[0].Dump()
@@ -124,5 +127,7 @@ Example_Row: {2}",
             return string.Join(",", Lat, Lng); 
         }
     }
+
+    
 }
 
