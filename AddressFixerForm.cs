@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -18,7 +19,8 @@ namespace MOISupport
 
         private Thread progressThread;
         private List<string> comboBoxItems;
-        private List<ComboBox> comboBoxsList; 
+        private List<ComboBox> comboBoxsList;
+        private string textFormated;
         public AddressFixerForm()
         {
             InitializeComponent();
@@ -70,22 +72,35 @@ namespace MOISupport
             progressAnimatonBox.Visible = false;
             loadFileButton.Enabled = true;
             loadFileButton.Text = Resources.loadFileButton_Default;
+            panel1.Visible = true;
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (sender == comboBox3) return;
 
-            var index = comboBoxsList.IndexOf((ComboBox) sender);
-            for (int i = index + 1; i < 3; i++)
+            
+
+            var indexSelected = comboBoxsList.IndexOf((ComboBox) sender);
+
+            
+
+            for (int i = indexSelected + 1; i < 3; i++)
             {
                 comboBoxsList[i].Items.Clear();
                 comboBoxsList[i].Text = null;
                 comboBoxsList[i].Visible = false;
             }
+
+            //Format text box
+           
+            PrepareTextBox();
             
+
+            if (sender == comboBox3) return;
+
             var tmpComboBoxItems = new List<string>();
-            foreach (var item in comboBoxsList[index].Items)
+
+            foreach (var item in comboBoxsList[indexSelected].Items)
             {
                 tmpComboBoxItems.Add(item.ToString());
             }
@@ -94,10 +109,34 @@ namespace MOISupport
 
             foreach (var tmpComboBoxItem in tmpComboBoxItems)
             {
-                comboBoxsList[index + 1].Items.Add(tmpComboBoxItem);
+                comboBoxsList[indexSelected + 1].Items.Add(tmpComboBoxItem);
             }
 
-            comboBoxsList[index + 1].Visible = true;
+            comboBoxsList[indexSelected + 1].Visible = true;
+        }
+
+        private void PrepareTextBox()
+        {
+            string googleRequest = @"Google Maps Request: ";
+            textFormated = string.Empty;
+
+            foreach (var comboBox in comboBoxsList)
+            {
+                if (comboBox.Text != string.Empty)
+                    textFormated += string.Format("[{0}],", comboBox.Text);
+            }
+            textFormated = textFormated.TrimEnd(',');
+
+            formatTextBox.Text = googleRequest + textFormated;
+            formatTextBox.SelectionStart = googleRequest.Length;
+            formatTextBox.SelectionLength = textFormated.Length;
+            formatTextBox.SelectionColor = Color.Green;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            button1.Enabled = false;
+            panel1.Visible = true;
         }
     }
 }

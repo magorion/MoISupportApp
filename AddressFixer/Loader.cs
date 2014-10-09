@@ -17,6 +17,7 @@ namespace MOISupport.AddressFixer
     class Loader
     {
         private string filePath;
+        public List<AddressInformation> LoadedRecords;
         public AddressFixerForm HandledForm { get; set; }
 
         private List<AddressInformation> GetValue(string filePath)
@@ -42,13 +43,13 @@ namespace MOISupport.AddressFixer
 
             try
             {
-                var loadedRecords = GetValue(OpenFileDialog.FileName);
+                LoadedRecords = GetValue(OpenFileDialog.FileName);
 
                 filePath = OpenFileDialog.SafeFileName;
 
                 Action actionTextBox = () =>
                 {
-                    var infoList = BuildInfo(loadedRecords);
+                    var infoList = BuildInfo(LoadedRecords);
                     HandledForm.fileInfoTextBox.Text = infoList;
                 };
 
