@@ -82,7 +82,8 @@ namespace MOISupport
 
             var indexSelected = comboBoxsList.IndexOf((ComboBox) sender);
 
-            
+            if (!button1.Visible)
+                button1.Visible = true;
 
             for (int i = indexSelected + 1; i < 3; i++)
             {
@@ -98,12 +99,7 @@ namespace MOISupport
 
             if (sender == comboBox3) return;
 
-            var tmpComboBoxItems = new List<string>();
-
-            foreach (var item in comboBoxsList[indexSelected].Items)
-            {
-                tmpComboBoxItems.Add(item.ToString());
-            }
+            var tmpComboBoxItems = (from object item in comboBoxsList[indexSelected].Items select item.ToString()).ToList();
 
             tmpComboBoxItems.Remove(((ComboBox) sender).SelectedItem.ToString());
 
@@ -117,7 +113,7 @@ namespace MOISupport
 
         private void PrepareTextBox()
         {
-            string googleRequest = @"Google Maps Request: ";
+            const string googleRequest = @"Google Maps Request: ";
             textFormated = string.Empty;
 
             foreach (var comboBox in comboBoxsList)
